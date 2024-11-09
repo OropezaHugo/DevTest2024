@@ -9,6 +9,5 @@ public class Polls
     [Required]
     public string Name { get; set; }
     
-    
-    public ICollection<Options> Options { get; set; }
+    public ICollection<Options> Options { get; set; } = new List<Options>();
 }

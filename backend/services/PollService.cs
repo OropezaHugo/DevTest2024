@@ -9,19 +9,30 @@ namespace backend.services;
 
 public class PollService: IPollService
 {
-    private BackendSingletonDb _backendSingletonDb;
+    private BackendDbContext _backendDbContext;
     private IMapper _mapper;
 
-    public PollService(BackendSingletonDb backendSingletonDb, IMapper mapper)
+    public PollService(BackendDbContext backendDbContext, IMapper mapper)
     {
-        _backendSingletonDb = backendSingletonDb;
+        _backendDbContext = backendDbContext;
         _mapper = mapper;
     }
 
     public List<PollDTO> GetPolls()
     {
-        var polls = _backendSingletonDb.Polls;
-        return polls.Select(polls1 => _mapper.Map<PollDTO>(polls1)).ToList();
+        List<Polls> list = new List<Polls>();
+        foreach (Polls poll in _backendDbContext.Polls)
+        {
+            var pollOptions = _backendDbContext.Options.Where(o => o.Id == poll.Id).ToList();
+            list.Add(new Polls()
+            {
+                Id = poll.Id,
+                Name = poll.Name,
+                Options = pollOptions,
+            });
+        }
+        
+        return list.Select(poll => _mapper.Map<PollDTO>(poll)).ToList();
     }
 
     public PollDTO PostPoll(CreatePollDTO poll)
@@ -37,22 +48,21 @@ public class PollService: IPollService
         {
             Guid optionId = Guid.NewGuid();
             var options = _mapper.Map<Options>((createOptionDto, optionId));
-            polls.Options.Add(options);
+            _backendDbContext.Options.Add(options);
         }
-        _backendSingletonDb.Polls.Add(polls);
+        _backendDbContext.Polls.Add(polls);
+        _backendDbContext.SaveChanges();
         return _mapper.Map<PollDTO>(polls);
     }
 
     public VotePollResponseDTO? VoteForOption(VotePollOptionDTO vote, Guid pollId)
     {
-        Polls? polls = _backendSingletonDb.Polls.Find(polls1 => polls1.Id == pollId);
-        
-
+        Polls? polls = _backendDbContext.Polls.FirstOrDefault(polls1 => polls1.Id == pollId);
         if (polls == null)
         {
             return null;
         }
-        Votes? pollvote = _backendSingletonDb.Votes.Find(votes => votes.Email == vote.Email);
+        Votes? pollvote = _backendDbContext.Votes.FirstOrDefault(votes => votes.Email == vote.Email);
         if (pollvote != null)
         {
             return null;
@@ -65,7 +75,8 @@ public class PollService: IPollService
                 
             }
         }
-        _backendSingletonDb.Votes.Add(pollvote);
+        _backendDbContext.Votes.Add(pollvote);
+        _backendDbContext.SaveChanges();
         return new VotePollResponseDTO()
         {
             OptionId = vote.OptionId,

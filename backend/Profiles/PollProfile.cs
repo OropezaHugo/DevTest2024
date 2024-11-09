@@ -21,6 +21,7 @@ public class PollProfile: Profile
         CreateMap<(CreateOptionDTO, Guid), Options>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Item2))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Item1.Name))
-            .ForMember(dest => dest.Votes, opt => opt.Ignore());
+            .ForMember(dest => dest.Votes, opt => opt.Ignore())
+            .ForMember(dest => dest.PollId, opt => opt.MapFrom());
     }
 }

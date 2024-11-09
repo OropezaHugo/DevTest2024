@@ -1,8 +1,12 @@
 using backend.data;
 using backend.Profiles;
 using backend.services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<BackendDbContext>(optionsBuilder =>
+    optionsBuilder.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost",
@@ -13,8 +17,6 @@ builder.Services.AddCors(options =>
 
 });
 builder.Services.AddAutoMapper(typeof(PollProfile));
-
-builder.Services.AddSingleton(BackendSingletonDb.GetInstance());
 
 builder.Services.Scan(scan => scan
     .FromAssemblyOf<PollService>()
@@ -40,6 +42,11 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<BackendDbContext>();
+    context.Database.Migrate();
+}
 app.UseRouting();
 app.UseCors("AllowLocalhost");
 app.UseAuthorization();

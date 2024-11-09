@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.data.entities;
 
@@ -10,5 +11,10 @@ public class Options
     public string Name { get; set; }
     
     public uint Votes { get; set; }
+    
+    public Guid PollId { get; set; }
+    
+    [ForeignKey(nameof(PollId))]
+    public Polls? Poll { get; set; }
     
 }
