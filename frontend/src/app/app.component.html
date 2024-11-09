@@ -1,0 +1,17 @@
+<div class="header">
+  <h1>Online Polls</h1>
+</div>
+
+<div class="poll-list">
+  <div class="poll-list-header">
+    <div class="left-list-header">
+      <h2>Poll List</h2>
+    </div>
+    <div class="right-list-header">
+      <button mat-flat-button (click)="openDialog()" >Add new</button>
+    </div>
+    @for(poll of polls; track poll.id){
+      <app-poll-view class="poll-data" [pollData]="poll"></app-poll-view>
+    }
+  </div>
+</div>

@@ -1,0 +1,35 @@
+.header{
+  display: flex;
+  flex-direction: row;
+}
+
+.poll-list {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  max-width: 1000px;
+
+}
+.poll-list-header {
+  display: grid;
+  grid: auto  / repeat(2, 1fr);
+  grid-gap: 20px;
+
+  .left-list-header {
+    display: flex;
+    flex-direction: row;
+  }
+  .right-list-header {
+
+    display: flex;
+    flex-direction: row-reverse;
+  }
+}
+
+.poll-data {
+  grid-column:1 / span 2;
+  padding: 5px;
+  border: black solid 2px;
+}
+
+

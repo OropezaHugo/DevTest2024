@@ -1,0 +1,23 @@
+<div class="poll">
+  <div class="poll-header">
+    <p>{{pollData().name}}</p>
+    <div class="right">
+      <button mat-flat-button>Vote</button>
+    </div>
+  </div>
+  <div class="options-list">
+    @for (option of pollData().options; track option.id){
+      <div class="option-info">
+        <div class="left">
+          <p>{{option.name}}</p>
+        </div>
+        <div class="right">
+          <p>{{(option.votes / totalVotes) * 100}}%</p>
+        </div>
+      </div>
+    }
+  </div>
+  <div class="poll-footer">
+    <p>MUCHO TEXTO</p>
+  </div>
+</div>

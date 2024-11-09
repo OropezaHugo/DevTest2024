@@ -1,0 +1,20 @@
+
+<h2 mat-dialog-title>Hi </h2>
+<mat-dialog-content>
+  <p>What's your favorite animal?</p>
+  <mat-form-field appearance="outline" [formGroup]="newPollForm">
+    <mat-label>PollTittle</mat-label>
+    <input matInput formControlName="name" />
+
+  </mat-form-field>
+  <p>Options</p>
+  <form [formGroup]="newPollForm.controls.options" >
+    <mat-label>Option 1</mat-label>
+    <input matInput formControlName="option1"/>
+    <mat-label>Option 2</mat-label>
+    <input matInput formControlName="option2"/>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onClose()">Ok</button>
+</mat-dialog-actions>

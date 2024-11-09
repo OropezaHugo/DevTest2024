@@ -1,0 +1,34 @@
+.poll {
+  display: flex;
+  flex-direction: column;
+
+  .poll-header {
+    display: grid;
+    grid: 1fr / repeat(2, 1fr);
+    button {
+      max-width: 100px;
+    }
+  }
+  .options-list{
+    margin: 20px;
+    @extend .poll;
+    .option-info {
+      display: grid;
+      grid: 1fr / 1fr 1fr;
+    }
+  }
+  .left {
+    display: flex;
+    flex-direction: row;
+  }
+  .right {
+
+    display: flex;
+    flex-direction: row-reverse;
+  }
+  .poll-footer {
+    display: flex;
+    flex-direction: row-reverse;
+  }
+}
+
